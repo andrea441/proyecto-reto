@@ -66,6 +66,23 @@ npm start
 ![Adición de un nuevo proyecto](/images/wireframe2.png)
 ![Adición de nuevos miembros del equipo](/images/wireframe3.png)
 
+## Docker
+
+También puedes usar Docker para ejecutar el proyecto. La imagen de Docker está disponible en [Docker Hub](https://hub.docker.com/r/andrea050/proyecto-reto). Sigue estos pasos para utilizarla:
+
+### 1. Descarga la imagen de Docker:
+
+```bash
+docker pull andrea050/proyecto-reto
+```
+
+### 2. Ejecuta el contenedor:
+
+```bash
+docker run -d -p 80:80 andrea050/proyecto-reto
+```
+
+Esto iniciará el proyecto en un contenedor Docker, y podrás acceder a la aplicación desde `http://localhost`.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
