@@ -1,33 +1,53 @@
 const express = require('express');
 
-// Crear un nuevo usuario
-function create(req, res, next) {
-    res.send(`POST => /users/ => ${req.body.name}`);
+function list(req, res) {
+  const page = req.params.page ? req.params.page : 1;
+
+  res.status(200).json({
+    message: 'Usuarios recuperados con éxito',
+    objs: [], 
+    page: page
+  });
 }
 
-// Listar todos los usuarios
-function list(req, res, next) {
-    res.send('GET => /users/');
+function index(req, res) {
+  const id = req.params.id;
+  res.status(200).json({
+    message: 'Usuario encontrado con éxito',
+    objs: {}  
+  });
 }
 
-// Obtener un usuario por ID
-function index(req, res, next) {
-    res.send(`GET => /users/${req.params.id}`);
+function update(req, res) {
+  const id = req.params.id;
+
+  const updatedUser = {};
+  if (req.body.name) updatedUser.name = req.body.name;
+  if (req.body.birthdate) updatedUser.birthdate = req.body.birthdate;
+  if (req.body.curp) updatedUser.curp = req.body.curp;
+  if (req.body.rfc) updatedUser.rfc = req.body.rfc;
+  if (req.body.address) updatedUser.address = req.body.address;
+  if (req.body.email) updatedUser.email = req.body.email;
+  if (req.body.password) updatedUser.password = req.body.password;
+
+  res.status(200).json({
+    message: 'Usuario actualizado con éxito',
+    objs: updatedUser  
+  });
 }
 
-// Reemplazar un usuario por ID
-function replace(req, res, next) {
-    res.send(`PUT => /users/${req.params.id}`);
+function destroy(req, res) {
+  const id = req.params.id;
+
+  res.status(200).json({
+    message: 'Usuario eliminado con éxito',
+    objs: { id }  
+  });
 }
 
-// Actualizar parcialmente un usuario por ID
-function update(req, res, next) {
-    res.send(`PATCH => /users/${req.params.id}`);
-}
-
-// Eliminar un usuario por ID
-function destroy(req, res, next) {
-    res.send(`DELETE => /users/${req.params.id}`);
-}
-
-module.exports = { create, list, index, replace, update, destroy };
+module.exports = {
+  list,
+  index,
+  update,
+  destroy
+};
