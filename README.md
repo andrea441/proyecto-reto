@@ -61,5 +61,11 @@ npm start
 ## Diagrama de interacción
 ![Diagrama de interacción del proyecto](/images/diagramadeinteraccion.png)
 
+## Wireframes
+![Pantalla de inicio de sesión](/images/wireframe1.png)
+![Adición de un nuevo proyecto](/images/wireframe2.png)
+![Adición de nuevos miembros del equipo](/images/wireframe3.png)
+
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
