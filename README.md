@@ -36,10 +36,10 @@ Danna Corral 358147
 | POST        | /projects            | Crea un nuevo proyecto.                                |
 | PUT         | /projects/:id        | Actualiza los detalles de un proyecto existente.        |
 | DELETE      | /projects/:id        | Elimina un proyecto.                                   |
-| GET         | /tasks               | Lista todas las tareas.                                |
-| POST        | /tasks               | Crea una nueva tarea y la asigna a un proyecto.         |
-| PUT         | /tasks/:id           | Actualiza el estado o detalles de una tarea específica. |
-| DELETE      | /tasks/:id           | Elimina una tarea.                                     |
+| GET         | /columns               | Lista todas las tareas.                                |
+| POST        | /columns               | Crea una nueva tarea y la asigna a un proyecto.         |
+| PUT         | /columns/:id           | Actualiza el estado o detalles de una tarea específica. |
+| DELETE      | /columns/:id           | Elimina una tarea.                                     |
 
 ## Installation
 
