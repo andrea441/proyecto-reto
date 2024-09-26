@@ -65,9 +65,9 @@ npm start
 ![Pantalla de inicio de sesión](/images/wireframe1.png)
 ![Adición de un nuevo proyecto](/images/wireframe2.png)
 ![Adición de nuevos miembros del equipo](/images/wireframe3.png)
-![Frente de la tarjeta](/images/wireframe4.png)
-![Reverso de la tarjeta](/images/wireframe5.png)
-![Tablero SCRUM](/images/wireframe6.png)
+![Frente de la tarjeta](/images/wireframe4.jpg)
+![Reverso de la tarjeta](/images/wireframe5.jpg)
+![Tablero SCRUM](/images/wireframe6.jpg)
 
 ## Docker
 
