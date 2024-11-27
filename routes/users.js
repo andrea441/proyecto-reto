@@ -1,14 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/users.js')
+const usuarioController = require('../controllers/users');
 
-/* GET users listing. */
-router.get('/:page?', controller.list);
+// Obtener todos los usuarios
+router.get('/', usuarioController.getUsuarios);
 
-router.get('/id/:id', controller.index);
+// Crear un nuevo usuario
+router.post('/', usuarioController.createUsuario);
 
-router.put('/:id', controller.update);
+// Obtener un usuario por ID
+router.get('/:id', usuarioController.getUsuarioById);
 
-router.delete('/:id', controller.destroy);
+// Actualizar un usuario
+router.put('/:id', usuarioController.updateUsuario);
+
+// Eliminar un usuario
+router.delete('/:id', usuarioController.deleteUsuario);
 
 module.exports = router;

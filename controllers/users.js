@@ -1,53 +1,50 @@
-const express = require('express');
+const Usuario = require('../models/user');
 
-function list(req, res) {
-  const page = req.params.page ? req.params.page : 1;
+exports.getUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.find().populate('rol');
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+};
 
-  res.status(200).json({
-    message: 'Usuarios recuperados con éxito',
-    objs: [], 
-    page: page
-  });
-}
+exports.createUsuario = async (req, res) => {
+  try {
+    const nuevoUsuario = new Usuario(req.body);
+    await nuevoUsuario.save();
+    res.status(201).json(nuevoUsuario);
+  } catch (error) {
+    res.status(400).json({ error: 'Error al crear el usuario' });
+  }
+};
 
-function index(req, res) {
-  const id = req.params.id;
-  res.status(200).json({
-    message: 'Usuario encontrado con éxito',
-    objs: {}  
-  });
-}
+exports.getUsuarioById = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.params.id).populate('rol');
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(usuario);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+};
 
-function update(req, res) {
-  const id = req.params.id;
+exports.updateUsuario = async (req, res) => {
+  try {
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!usuarioActualizado) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(usuarioActualizado);
+  } catch (error) {
+    res.status(400).json({ error: 'Error al actualizar el usuario' });
+  }
+};
 
-  const updatedUser = {};
-  if (req.body.name) updatedUser.name = req.body.name;
-  if (req.body.birthdate) updatedUser.birthdate = req.body.birthdate;
-  if (req.body.curp) updatedUser.curp = req.body.curp;
-  if (req.body.rfc) updatedUser.rfc = req.body.rfc;
-  if (req.body.address) updatedUser.address = req.body.address;
-  if (req.body.email) updatedUser.email = req.body.email;
-  if (req.body.password) updatedUser.password = req.body.password;
-
-  res.status(200).json({
-    message: 'Usuario actualizado con éxito',
-    objs: updatedUser  
-  });
-}
-
-function destroy(req, res) {
-  const id = req.params.id;
-
-  res.status(200).json({
-    message: 'Usuario eliminado con éxito',
-    objs: { id }  
-  });
-}
-
-module.exports = {
-  list,
-  index,
-  update,
-  destroy
+exports.deleteUsuario = async (req, res) => {
+  try {
+    const usuarioEliminado = await Usuario.findByIdAndDelete(req.params.id);
+    if (!usuarioEliminado) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar el usuario' });
+  }
 };

@@ -1,39 +1,84 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const config = require('config');
+const {expressjwt} = require('express-jwt');
+const i18n = require('i18n');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const userRoutes = require('./routes/users');
+const abilityRoutes = require('./routes/abilitys');
+const addressRoutes = require('./routes/address');
+const permissionRoutes = require('./routes/permissions');
+const rolRoutes = require('./routes/roles');
+const userHistorysRoutes = require('./routes/user_historys');
+const projectRoutes = require('./routes/projects');
+const boardRoutes = require('./routes/boards');
+const columnRoutes = require('./routes/columns');
+const releasesRoutes = require('./routes/releases');
+const retrospectiveRoutes = require('./routes/retrospectives');
+const sprintRoutes = require('./routes/sprints');
+const uri= config.get("dbChain");
 
-var app = express();
+mongoose.connect(uri);
+const db = mongoose.connection;
 
-// view engine setup
+db.on('open', ()=>{
+  console.log('Conexion correcta');
+});
+
+db.on('error', ()=>{
+  console.log('No se pudo conectar a la bd');
+});
+
+i18n.configure({
+  locales:['es-lat', 'es-esp', 'en-eua','en-in'],
+  cookie: 'language',
+  directory: `${__dirname}/locales`,
+});
+
+const app = express();
+
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(i18n.init);
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+const jwtKey = config.get("secret.key");
 
-// catch 404 and forward to error handler
+app.use('/users', userRoutes);
+app.use('/abilitys', abilityRoutes);
+app.use('/address', addressRoutes);
+app.use('/permissions', permissionRoutes);
+app.use('/roles', rolRoutes);
+app.use('/user_historys', userHistorysRoutes);
+app.use('/boards', boardRoutes);
+app.use('/columns', columnRoutes);
+app.use('/projects', projectRoutes);
+app.use('/releases', releasesRoutes);
+app.use('/retrospectives', retrospectiveRoutes);
+app.use('/sprints', sprintRoutes);
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+app.use((req, res, next) => {
+  req.ability = abilities.defineRulesFor(req.auth.data);
+  next();
+});
+
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
