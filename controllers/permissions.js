@@ -1,4 +1,4 @@
-const Permiso = require('../models/permissions');
+const Permiso = require('../models/permission');
 
 exports.getPermisos = async (req, res) => {
   try {

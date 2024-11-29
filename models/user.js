@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const HabilidadSchema = require('./Habilidad');
-const DomicilioSchema = require('./Domicilio');
+const HabilidadSchema = require('./ability');
+const DomicilioSchema = require('./address');
 
 const UsuarioSchema = new mongoose.Schema({
   usuario: { type: String, required: true, unique: true },

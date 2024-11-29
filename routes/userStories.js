@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const historialUsuarioController = require('../controllers/userStories');
+const historiaController = require('../controllers/userStories');
 
 // Obtener todos los historiales de usuario
-router.get('/', historialUsuarioController.getHistorialUsuarios);
+router.get('/', historiaController.getHistorias);
 
 // Crear un nuevo historial de usuario
-router.post('/', historialUsuarioController.createHistorialUsuario);
+router.post('/', historiaController.createHistoria);
 
 // Obtener un historial de usuario por ID
-router.get('/:id', historialUsuarioController.getHistorialUsuarioById);
+router.get('/:id', historiaController.getHistoriaById);
 
 // Actualizar un historial de usuario
-router.put('/:id', historialUsuarioController.updateHistorialUsuario);
+router.put('/:id', historiaController.updateHistoria);
 
 // Eliminar un historial de usuario
-router.delete('/:id', historialUsuarioController.deleteHistorialUsuario);
+router.delete('/:id', historiaController.deleteHistoria);
 
 module.exports = router;

@@ -8,6 +8,7 @@ const config = require('config');
 const {expressjwt} = require('express-jwt');
 const i18n = require('i18n');
 
+const indexRoutes = require('./routes/index');
 const userRoutes = require('./routes/users');
 const abilityRoutes = require('./routes/abilities');
 const addressRoutes = require('./routes/address');
@@ -54,6 +55,7 @@ app.use(i18n.init);
 
 const jwtKey = config.get("secret.key");
 
+app.use('/', indexRoutes);
 app.use('/users', userRoutes);
 app.use('/abilities', abilityRoutes);
 app.use('/address', addressRoutes);

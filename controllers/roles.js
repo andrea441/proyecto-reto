@@ -1,4 +1,4 @@
-const Rol = require('../models/Rol');
+const Rol = require('../models/role');
 
 exports.getRoles = async (req, res) => {
   try {
