@@ -9,17 +9,18 @@ const {expressjwt} = require('express-jwt');
 const i18n = require('i18n');
 
 const userRoutes = require('./routes/users');
-const abilityRoutes = require('./routes/abilitys');
+const abilityRoutes = require('./routes/abilities');
 const addressRoutes = require('./routes/address');
 const permissionRoutes = require('./routes/permissions');
 const rolRoutes = require('./routes/roles');
-const userHistorysRoutes = require('./routes/user_historys');
+const userStoryRoutes = require('./routes/userStories');
 const projectRoutes = require('./routes/projects');
 const boardRoutes = require('./routes/boards');
 const columnRoutes = require('./routes/columns');
 const releasesRoutes = require('./routes/releases');
 const retrospectiveRoutes = require('./routes/retrospectives');
 const sprintRoutes = require('./routes/sprints');
+const developerRoutes = require('./routes/developers');
 const uri= config.get("dbChain");
 
 mongoose.connect(uri);
@@ -54,17 +55,18 @@ app.use(i18n.init);
 const jwtKey = config.get("secret.key");
 
 app.use('/users', userRoutes);
-app.use('/abilitys', abilityRoutes);
+app.use('/abilities', abilityRoutes);
 app.use('/address', addressRoutes);
 app.use('/permissions', permissionRoutes);
 app.use('/roles', rolRoutes);
-app.use('/user_historys', userHistorysRoutes);
+app.use('/userStories', userStoryRoutes);
 app.use('/boards', boardRoutes);
 app.use('/columns', columnRoutes);
 app.use('/projects', projectRoutes);
 app.use('/releases', releasesRoutes);
 app.use('/retrospectives', retrospectiveRoutes);
 app.use('/sprints', sprintRoutes);
+app.use('/developers', developerRoutes);
 
 app.use(function(req, res, next) {
   next(createError(404));

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const habilidadController = require('../controllers/abilitys');
+const habilidadController = require('../controllers/abilities');
 
 // Obtener todas las habilidades
 router.get('/', habilidadController.getHabilidades);

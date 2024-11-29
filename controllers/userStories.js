@@ -1,4 +1,4 @@
-const HistoriaUsuario = require('../models/user_history');
+const HistoriaUsuario = require('../models/userStory');
 
 exports.getHistorias = async (req, res) => {
   try {

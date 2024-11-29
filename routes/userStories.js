@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const historialUsuarioController = require('../controllers/user_historys');
+const historialUsuarioController = require('../controllers/userStories');
 
 // Obtener todos los historiales de usuario
 router.get('/', historialUsuarioController.getHistorialUsuarios);
