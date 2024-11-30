@@ -46,7 +46,7 @@ function login(req, res, next) {
         }
     }).catch(err => {
         res.status(500).json({
-            msg: res.__('login.error'),
+            msg: res.__('login.fail'),
             obj: err
         });
     });

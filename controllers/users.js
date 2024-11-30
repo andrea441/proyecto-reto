@@ -3,30 +3,38 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 async function create(req, res, next) {
-    let user = req.body.user;
-    let email = req.body.email;
-    let password = req.body.password;
-    let socialMediaList = req.body.socialMediaList || [];
-    let role = req.body.role;
-    let salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+    try {
+        const { user, email, password, socialMediaList = [], role } = req.body;
 
-    let User = new User({
-        _user: user,        
-        _email: email,
-        _password: passwordHash,
-        _socialMediaList: socialMediaList,
-        _role: role,
-        _salt: salt
-    });
+        if (!user || !email || !password) {
+            return res.status(400).json({
+                msg: "Todos los campos (user, email, password) son obligatorios"
+            });
+        }
 
-    User.save().then(obj => res.status(200).json({
-        msg: "Usuario creado correctamente",
-        obj: obj
-    })).catch(ex => res.status(500).json({
-        msg: "No se pudo almacenar el usuario",
-        obj: ex
-    }));
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        const newUser = new User({
+            _user: user,
+            _email: email,
+            _password: passwordHash,
+            _socialMediaList: socialMediaList,
+            _role: role,
+            _salt: salt
+        });
+
+        const savedUser = await newUser.save();
+        res.status(200).json({
+            msg: "Usuario creado correctamente",
+            obj: savedUser
+        });
+    } catch (ex) {
+        res.status(500).json({
+            msg: "No se pudo almacenar el usuario",
+            obj: ex.message
+        });
+    }
 }
 
 function list(req, res, next) {

@@ -1,5 +1,4 @@
 {
-	"login.fail": "Incorrect credentials.",
-	"login.ok": "Login success.",
-	"login.error": "Login error."
+	"login.fail": "Login fail.",
+	"login.ok": "Login success."
 }
