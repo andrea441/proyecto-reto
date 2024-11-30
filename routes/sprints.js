@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const sprintController = require('../controllers/sprints');
+const controller = require('../controllers/sprints')
 
-// Obtener todos los sprints
-router.get('/', sprintController.getSprints);
+router.post('/', controller.create);
 
-// Crear un nuevo sprint
-router.post('/', sprintController.createSprint);
+router.get('/', controller.list);
 
-// Obtener un sprint por ID
-router.get('/:id', sprintController.getSprintById);
+router.get('/:id', controller.index);
 
-// Actualizar un sprint
-router.put('/:id', sprintController.updateSprint);
+router.put('/:id', controller.replace);
 
-// Eliminar un sprint
-router.delete('/:id', sprintController.deleteSprint);
+router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.destroy);
 
 module.exports = router;

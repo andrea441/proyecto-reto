@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const columnaController = require('../controllers/columns');
+const controller = require('../controllers/columns')
 
-// Obtener todas las columnas
-router.get('/', columnaController.getColumnas);
+router.post('/', controller.create);
 
-// Crear una nueva columna
-router.post('/', columnaController.createColumna);
+router.get('/', controller.list);
 
-// Obtener una columna por ID
-router.get('/:id', columnaController.getColumnaById);
+router.get('/:id', controller.index);
 
-// Actualizar una columna
-router.put('/:id', columnaController.updateColumna);
+router.put('/:id', controller.replace);
 
-// Eliminar una columna
-router.delete('/:id', columnaController.deleteColumna);
+router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.destroy);
 
 module.exports = router;

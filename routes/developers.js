@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const developerController = require('../controllers/developers');
+const controller = require('../controllers/developers')
 
-// Obtener todos los developers
-router.get('/', developerController.getDevelopers);
+router.post('/', controller.create);
 
-// Crear un nuevo developer
-router.post('/', developerController.createDeveloper);
+router.get('/', controller.list);
 
-// Obtener un developer por ID
-router.get('/:id', developerController.getDeveloperById);
+router.get('/:id', controller.index);
 
-// Actualizar un developer
-router.put('/:id', developerController.updateDeveloper);
+router.put('/:id', controller.replace);
 
-// Eliminar un developer
-router.delete('/:id', developerController.deleteDeveloper);
+router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.destroy);
 
 module.exports = router;

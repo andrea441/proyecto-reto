@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const retrospectivaController = require('../controllers/retrospectives');
+const controller = require('../controllers/retrospectives')
 
-// Obtener todas las retrospectivas
-router.get('/', retrospectivaController.getRetrospectivas);
+router.post('/', controller.create);
 
-// Crear una nueva retrospectiva
-router.post('/', retrospectivaController.createRetrospectiva);
+router.get('/', controller.list);
 
-// Obtener una retrospectiva por ID
-router.get('/:id', retrospectivaController.getRetrospectivaById);
+router.get('/:id', controller.index);
 
-// Actualizar una retrospectiva
-router.put('/:id', retrospectivaController.updateRetrospectiva);
+router.put('/:id', controller.replace);
 
-// Eliminar una retrospectiva
-router.delete('/:id', retrospectivaController.deleteRetrospectiva);
+router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.destroy);
 
 module.exports = router;

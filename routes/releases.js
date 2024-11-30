@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const releaseController = require('../controllers/releases');
+const controller = require('../controllers/releases')
 
-// Obtener todos los releases
-router.get('/', releaseController.getReleases);
+router.post('/', controller.create);
 
-// Crear un nuevo release
-router.post('/', releaseController.createRelease);
+router.get('/', controller.list);
 
-// Obtener un release por ID
-router.get('/:id', releaseController.getReleaseById);
+router.get('/:id', controller.index);
 
-// Actualizar un release
-router.put('/:id', releaseController.updateRelease);
+router.put('/:id', controller.replace);
 
-// Eliminar un release
-router.delete('/:id', releaseController.deleteRelease);
+router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.destroy);
 
 module.exports = router;

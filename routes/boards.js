@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const tableroController = require('../controllers/boards');
+const controller = require('../controllers/boards')
 
-// Obtener todos los tableros
-router.get('/', tableroController.getTableros);
+router.post('/', controller.create);
 
-// Crear un nuevo tablero
-router.post('/', tableroController.createTablero);
+router.get('/', controller.list);
 
-// Obtener un tablero por ID
-router.get('/:id', tableroController.getTableroById);
+router.get('/:id', controller.index);
 
-// Actualizar un tablero
-router.put('/:id', tableroController.updateTablero);
+router.put('/:id', controller.replace);
 
-// Eliminar un tablero
-router.delete('/:id', tableroController.deleteTablero);
+router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.destroy);
 
 module.exports = router;
