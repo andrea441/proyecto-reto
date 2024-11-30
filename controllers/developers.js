@@ -18,13 +18,13 @@ function create(req, res, next) {
     address.country = req.body.country;
 
     let developer = new Developer({
-        name: name,
-        lastName: lastName,
-        birthDate: birthDate,
-        CURP: CURP,
-        RFC: RFC,
-        address: address,
-        skills: skills,
+        _name: name,
+        _lastName: lastName,
+        _birthDate: birthDate,
+        _CURP: CURP,
+        _RFC: RFC,
+        _address: address,
+        _skills: skills,
     });
 
     developer.save()

@@ -6,8 +6,8 @@ function create(req, res, next) {
     const columnsReleaseBacklog = req.body.columnsReleaseBacklog;
 
     let board = new Board({
-        columnProductBacklog: columnProductBacklog,
-        columnsReleaseBacklog: columnsReleaseBacklog
+        _columnProductBacklog: columnProductBacklog,
+        _columnsReleaseBacklog: columnsReleaseBacklog
     });
 
     board.save().then(obj => res.status(200).json({

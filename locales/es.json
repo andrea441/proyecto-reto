@@ -1,18 +1,5 @@
 {
-    "welcome": "Bienvenido",
-    "login": {
-      "title": "Iniciar sesión",
-      "username": "Nombre de usuario",
-      "password": "Contraseña",
-      "submit": "Ingresar"
-    },
-    "error": {
-      "notFound": "Página no encontrada",
-      "serverError": "Error en el servidor"
-    },
-    "user": {
-      "profile": "Perfil de usuario",
-      "settings": "Configuraciones"
-    }
-  }
-  
+	"login.fail": "Credenciales incorrectas.",
+	"login.ok": "Inicio de sesión correcto.",
+	"login.error": "Error al iniciar sesión."
+}

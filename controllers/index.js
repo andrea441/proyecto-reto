@@ -8,30 +8,49 @@ function home(req, res, next){
     res.render('index', { title: 'Express' });
 }
 
-function login(req, res, next){
+function login(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
-    const jwtKey = config.get("secret.key");
+    const jwtKey = config.get('secret.key');
 
-    User.findOne({"_email":email}).then(user => {
-        if(user){
-            bcrypt.hash(password, user.salt, (err, hash)=>{
-                if(err){
-                    res.render('index', { title: 'Express', status:res.__('login.fail') });
+    User.findOne({ email: email }).then(user => {
+        if (user) {
+            bcrypt.hash(password, user.salt, (err, hash) => {
+                if (err) {
+                    return res.status(403).json({
+                        msg: res.__('login.fail'),
+                        obj: null
+                    });
                 }
-                if(hash === user.password){
-                    res.render('home', {user:user});
-                }else{
-                    res.render('index', { title: 'Express', status:res.__('login.fail') });
+
+                if (hash === user.password) {
+                    return res.status(200).json({
+                        msg: res.__('login.ok'),
+                        obj: jwt.sign({
+                            data: user.id,
+                            exp: Math.floor(Date.now() / 1000) + 1000*60*60*24
+                        }, jwtKey)
+                    });
+                } else {
+                    return res.status(403).json({
+                        msg: res.__('login.fail'),
+                        obj: null
+                    });
                 }
             });
-        }else{
-            res.status(403).json({
+        } else {
+            return res.status(403).json({
                 msg: res.__('login.fail'),
                 obj: null
             });
         }
-    }).catch();
+    }).catch(err => {
+        res.status(500).json({
+            msg: res.__('login.error'),
+            obj: err
+        });
+    });
 }
+
 
 module.exports = {home, login};

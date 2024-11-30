@@ -12,7 +12,7 @@ async function create(req, res, next) {
     const passwordHash = await bcrypt.hash(password, salt);
 
     let User = new User({
-        _user: user,
+        _user: user,        
         _email: email,
         _password: passwordHash,
         _socialMediaList: socialMediaList,
