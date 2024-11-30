@@ -27,6 +27,24 @@ Danna Corral 358147
 - **JWT** (Autenticación)
 - **Postman** (Pruebas de la API)
 
+#Componentes Implementados
+
+- **Seguirdad**
+**JWT (JSON Web Tokens)**: Se utiliza JWT para la autenticación y autorización de usuarios, asegurando que las solicitudes a las rutas protegidas sean legítimas. Se recomienda almacenar el JWT en cookies con el flag httpOnly para prevenir ataques XSS.
+**Almacenamiento Seguro de Datos**: Se implementan prácticas para asegurar que los datos sensibles estén protegidos, evitando su exposición en el cliente.
+- **Manejo de ambientes**
+La aplicación está configurada para manejar diferentes ambientes (desarrollo, pruebas, producción) utilizando variables de entorno, lo que permite una configuración flexible y segura.
+- **Matriz RBAC (Control de Acceso Basado en Roles)**
+Se ha implementado un sistema de roles que permite gestionar los permisos de los usuarios, asegurando que cada uno tenga acceso solo a las funcionalidades necesarias según su rol.
+- **Internacionalización y Localización**
+La aplicación soporta múltiples idiomas y formatos regionales, permitiendo a los usuarios interactuar en su idioma preferido.
+
+#Pruebas
+Se han construido pruebas unitarias y de integración utilizando JEST y Supertest para cada ruta del proyecto. Se asegura que al menos el 50% del código esté cubierto por pruebas, garantizando así la estabilidad y funcionalidad de la aplicación.
+
+#Comunicación con PaaS
+La aplicación se comunica con MongoDB Atlas, un servicio PaaS que proporciona una base de datos escalable y segura en la nube. Se han implementado conexiones seguras utilizando credenciales almacenadas en variables de entorno.
+
 ## Estructura de la API
 
 | Método HTTP | Endpoint            | Descripción                                            |
