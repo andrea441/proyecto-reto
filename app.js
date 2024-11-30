@@ -10,8 +10,7 @@ const i18n = require('i18n');
 
 const indexRoutes = require('./routes/index');
 const userRoutes = require('./routes/users');
-const abilityRoutes = require('./routes/abilities');
-const addressRoutes = require('./routes/address');
+const skillsRoutes = require('./routes/skills');
 const permissionRoutes = require('./routes/permissions');
 const rolRoutes = require('./routes/roles');
 const userStoryRoutes = require('./routes/userStories');
@@ -57,8 +56,7 @@ const jwtKey = config.get("secret.key");
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
-app.use('/abilities', abilityRoutes);
-app.use('/address', addressRoutes);
+app.use('/skills', skillsRoutes);
 app.use('/permissions', permissionRoutes);
 app.use('/roles', rolRoutes);
 app.use('/userStories', userStoryRoutes);

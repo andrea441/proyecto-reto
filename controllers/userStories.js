@@ -13,7 +13,7 @@ function create(req, res, next) {
         event,
         result,
         fibonacci,
-        aprobation
+        approval
     } = req.body;
 
     let userStory = new UserStory({
@@ -27,7 +27,7 @@ function create(req, res, next) {
         _event: event,
         _result: result,
         _fibonacci: fibonacci,
-        _aprobation: aprobation
+        _approval: approval
     });
 
     userStory.save()
@@ -86,7 +86,7 @@ function replace(req, res, next) {
         event,
         result,
         fibonacci,
-        aprobation
+        approval
     } = req.body;
 
     let userStory = new Object({
@@ -100,7 +100,7 @@ function replace(req, res, next) {
         _event: event || "",
         _result: result || "",
         _fibonacci: fibonacci || "",
-        _aprobation: aprobation || false
+        _approval: approval || false
     });
 
     UserStory.findOneAndUpdate({ "_id": id }, userStory)

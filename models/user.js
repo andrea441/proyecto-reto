@@ -1,15 +1,59 @@
 const mongoose = require('mongoose');
-const HabilidadSchema = require('./ability');
-const DomicilioSchema = require('./address');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
-const UsuarioSchema = new mongoose.Schema({
-  usuario: { type: String, required: true, unique: true },
-  contraseña: { type: String, required: true },
-  redesSociales: [{ type: String, enum: ['FACEBOOK', 'GOOGLE', 'LINKEDIN'] }],
-  RFC: { type: String },
-  domicilio: DomicilioSchema, 
-  habilidades: [HabilidadSchema], 
-  rol: { type: mongoose.Schema.Types.ObjectId, ref: 'Rol' },
+const SocialMedia = {
+    FACEBOOK: 'Facebook',
+    GOOGLE: 'Google',
+    LINKEDIN: 'LinkedIn',
+};
+
+const schema = mongoose.Schema({
+    _user: {
+        type: String,
+        required: true,
+    },
+    _password: {
+        type: String,
+        required: true,
+    },
+    _socialMedia: [
+        {
+            type: String,
+            enum: Object.values(SocialMedia),
+        },
+    ],
 });
 
-module.exports = mongoose.model('Usuario', UsuarioSchema);
+class User {
+    constructor(user, password, socialMedia) {
+        this._user = user;
+        this._password = password;
+        this._socialMedia = socialMedia;
+    }
+
+    get user() {
+        return this._user;
+    }
+    set user(user) {
+        this._user = user;
+    }
+
+    get password() {
+        return this._password;
+    }
+    set password(password) {
+        this._password = password;
+    }
+
+    get socialMedia() {
+        return this._socialMedia;
+    }
+    set socialMedia(socialMedia) {
+        this._socialMedia = socialMedia;
+    }
+}
+
+schema.loadClass(User);
+schema.plugin(mongoosePaginate);
+
+module.exports = mongoose.model('User', schema);
