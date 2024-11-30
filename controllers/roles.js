@@ -6,8 +6,8 @@ function create(req, res, next) {
     const permission = req.body.permission || [];
 
     let role = new Role({
-        name: name,
-        permission: permission
+        _name: name,
+        _permission: permission
     });
 
     role.save()

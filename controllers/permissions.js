@@ -6,8 +6,8 @@ function create(req, res, next) {
     const description = req.body.description;
 
     let permission = new Permission({
-        name: name,
-        description: description
+        _name: name,
+        _description: description
     });
 
     permission.save()

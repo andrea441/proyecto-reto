@@ -12,6 +12,10 @@ const schema = mongoose.Schema({
         type: String,
         required: true,
     },
+    _email: {
+        type: String,
+        required: true,
+    },
     _password: {
         type: String,
         required: true,
@@ -26,13 +30,19 @@ const schema = mongoose.Schema({
             enum: Object.values(SocialMedia),
         },
     ],
+    _role: {
+        type: mongoose.ObjectId,
+        ref: 'Role'
+    }
 });
 
 class User {
     constructor(user, password, socialMedia) {
         this._user = user;
+        this._email = email;
         this._password = password;
         this._socialMedia = socialMedia;
+        this._role = role;
         this._salt = salt;
     }
 
@@ -41,6 +51,14 @@ class User {
     }
     set user(user) {
         this._user = user;
+    }
+
+    get email() {
+        return this._email;
+    }
+
+    set email(email) {
+        this._email = email;
     }
 
     get password() {
@@ -63,6 +81,14 @@ class User {
     }
     set socialMedia(socialMedia) {
         this._socialMedia = socialMedia;
+    }
+
+    get role() {
+        return this._role;
+    }
+
+    set role(role) {
+        return this._role = role;
     }
 }
 

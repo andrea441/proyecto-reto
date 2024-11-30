@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 const config = require('config');
 const {expressjwt} = require('express-jwt');
 const i18n = require('i18n');
-
-const jwtKey = config.get("secret.key");
+const dotenv = require('dotenv');
+dotenv.config();
 
 const indexRoutes = require('./routes/index');
 const userRoutes = require('./routes/users');
@@ -23,17 +23,21 @@ const releasesRoutes = require('./routes/releases');
 const retrospectiveRoutes = require('./routes/retrospectives');
 const sprintRoutes = require('./routes/sprints');
 const developerRoutes = require('./routes/developers');
-const uri= config.get("dbChain");
+
+const jwtKey = config.get('secret.key');
+const uri = process.env.MONGO_URI; 
+
+const app = express();
 
 mongoose.connect(uri);
 const db = mongoose.connection;
 
-db.on('open', ()=>{
-  console.log('Conexion correcta');
+db.on('open', () => {
+  console.log('Conexión correcta');
 });
 
-db.on('error', ()=>{
-  console.log('No se pudo conectar a la bd');
+db.on('error', () => {
+  console.log('No se pudo conectar a la BD');
 });
 
 i18n.configure({
@@ -41,8 +45,6 @@ i18n.configure({
   cookie: 'language',
   directory: `${__dirname}/locales`,
 });
-
-const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -53,6 +55,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(i18n.init);
+app.use(expressjwt({ secret: jwtKey, algorithms: ['HS256'] }).unless({ path: ["/login"] }));
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
@@ -70,11 +73,6 @@ app.use('/developers', developerRoutes);
 
 app.use(function(req, res, next) {
   next(createError(404));
-});
-
-app.use((req, res, next) => {
-  req.ability = abilities.defineRulesFor(req.auth.data);
-  next();
 });
 
 app.use(function(err, req, res, next) {

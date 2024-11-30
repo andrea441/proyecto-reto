@@ -4,18 +4,20 @@ const User = require('../models/user');
 
 async function create(req, res, next) {
     let user = req.body.user;
+    let email = req.body.email;
     let password = req.body.password;
     let socialMediaList = req.body.socialMediaList || [];
     let role = req.body.role;
-    const salt = await bcrypt.genSalt(10);
+    let salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
-
 
     let User = new User({
         _user: user,
+        _email: email,
         _password: passwordHash,
         _socialMediaList: socialMediaList,
-        _role: role
+        _role: role,
+        _salt: salt
     });
 
     User.save().then(obj => res.status(200).json({
@@ -57,12 +59,14 @@ function index(req, res, next) {
 function replace(req, res, next) {
     const id = req.params.id;
     let user = req.body.user ? req.body.user : "";
+    let email = req.body.email ? req.body.email : "";
     let password = req.body.password ? req.body.password : "";
     let socialMediaList = req.body.socialMediaList ? req.body.socialMediaList : [];
     let role = req.body.role ? req.body.role : "";
 
     let updatedUser = new Object({
         _user: user,
+        _email: email,
         _password: password,
         _socialMediaList: socialMediaList,
         _role: role
@@ -81,12 +85,14 @@ function replace(req, res, next) {
 function update(req, res, next) {
     const id = req.params.id;
     let user = req.body.user;
+    let email = req.body.email;
     let password = req.body.password;
     let socialMediaList = req.body.socialMediaList;
     let role = req.body.role;
 
     let updatedUser = new Object();
     if (user) updatedUser._user = user;
+    if (email) updatedUser._email = email;
     if (password) updatedUser._password = password;
     if (socialMediaList) updatedUser._socialMediaList = socialMediaList;
     if (role) updatedUser._role = role;
