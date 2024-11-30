@@ -8,6 +8,8 @@ const config = require('config');
 const {expressjwt} = require('express-jwt');
 const i18n = require('i18n');
 
+const jwtKey = config.get("secret.key");
+
 const indexRoutes = require('./routes/index');
 const userRoutes = require('./routes/users');
 const skillsRoutes = require('./routes/skills');
@@ -51,8 +53,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(i18n.init);
-
-const jwtKey = config.get("secret.key");
 
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);

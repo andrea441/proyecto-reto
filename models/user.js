@@ -16,6 +16,10 @@ const schema = mongoose.Schema({
         type: String,
         required: true,
     },
+    _salt: {
+        type: String,
+        required: true
+    },
     _socialMedia: [
         {
             type: String,
@@ -29,6 +33,7 @@ class User {
         this._user = user;
         this._password = password;
         this._socialMedia = socialMedia;
+        this._salt = salt;
     }
 
     get user() {
@@ -44,6 +49,14 @@ class User {
     set password(password) {
         this._password = password;
     }
+
+    get salt() {
+        return this._salt;
+    }
+
+    set salt(salt) {
+        this._salt = salt;
+    }        
 
     get socialMedia() {
         return this._socialMedia;

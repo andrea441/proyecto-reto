@@ -1,20 +1,24 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
-function create(req, res, next) {
-    const user = req.body.user;
-    const password = req.body.password;
-    const socialMediaList = req.body.socialMediaList || [];
-    const role = req.body.role;
+async function create(req, res, next) {
+    let user = req.body.user;
+    let password = req.body.password;
+    let socialMediaList = req.body.socialMediaList || [];
+    let role = req.body.role;
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
 
-    let newUser = new User({
+
+    let User = new User({
         _user: user,
-        _password: password,
+        _password: passwordHash,
         _socialMediaList: socialMediaList,
         _role: role
     });
 
-    newUser.save().then(obj => res.status(200).json({
+    User.save().then(obj => res.status(200).json({
         msg: "Usuario creado correctamente",
         obj: obj
     })).catch(ex => res.status(500).json({
