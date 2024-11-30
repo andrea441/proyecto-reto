@@ -1,50 +1,112 @@
-const Usuario = require('../models/user');
+const express = require('express');
+const User = require('../models/user');
 
-exports.getUsuarios = async (req, res) => {
-  try {
-    const usuarios = await Usuario.find().populate('rol');
-    res.json(usuarios);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener usuarios' });
-  }
-};
+function create(req, res, next) {
+    const user = req.body.user;
+    const password = req.body.password;
+    const socialMediaList = req.body.socialMediaList || [];
+    const role = req.body.role;
 
-exports.createUsuario = async (req, res) => {
-  try {
-    const nuevoUsuario = new Usuario(req.body);
-    await nuevoUsuario.save();
-    res.status(201).json(nuevoUsuario);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al crear el usuario' });
-  }
-};
+    let newUser = new User({
+        _user: user,
+        _password: password,
+        _socialMediaList: socialMediaList,
+        _role: role
+    });
 
-exports.getUsuarioById = async (req, res) => {
-  try {
-    const usuario = await Usuario.findById(req.params.id).populate('rol');
-    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.json(usuario);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el usuario' });
-  }
-};
+    newUser.save().then(obj => res.status(200).json({
+        msg: "Usuario creado correctamente",
+        obj: obj
+    })).catch(ex => res.status(500).json({
+        msg: "No se pudo almacenar el usuario",
+        obj: ex
+    }));
+}
 
-exports.updateUsuario = async (req, res) => {
-  try {
-    const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!usuarioActualizado) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.json(usuarioActualizado);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al actualizar el usuario' });
-  }
-};
+function list(req, res, next) {
+    let page = req.params.page ? req.params.page : 1;
+    const options = {
+        page: page,
+        limit: 5
+    };
+    User.paginate({}, options).then(objs => res.status(200).json({
+        msg: "Lista de usuarios",
+        obj: objs
+    })).catch(ex => res.status(500).json({
+        msg: "No se pudo consultar la lista de usuarios",
+        obj: ex
+    }));
+}
 
-exports.deleteUsuario = async (req, res) => {
-  try {
-    const usuarioEliminado = await Usuario.findByIdAndDelete(req.params.id);
-    if (!usuarioEliminado) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.json({ message: 'Usuario eliminado correctamente' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el usuario' });
-  }
-};
+function index(req, res, next) {
+    const id = req.params.id;
+    User.findOne({"_id": id}).then(obj => res.status(200).json({
+        msg: `Usuario con el id ${id}`,
+        obj: obj
+    }))
+    .catch(ex => res.status(500).json({
+        msg: "No se pudo consultar el usuario",
+        obj: ex
+    }));
+}
+
+function replace(req, res, next) {
+    const id = req.params.id;
+    let user = req.body.user ? req.body.user : "";
+    let password = req.body.password ? req.body.password : "";
+    let socialMediaList = req.body.socialMediaList ? req.body.socialMediaList : [];
+    let role = req.body.role ? req.body.role : "";
+
+    let updatedUser = new Object({
+        _user: user,
+        _password: password,
+        _socialMediaList: socialMediaList,
+        _role: role
+    });
+
+    User.findOneAndUpdate({"_id": id}, updatedUser)
+        .then(obj => res.status(200).json({
+            msg: "Se reemplazó el usuario",
+            obj: obj
+        })).catch(ex => res.status(500).json({
+            msg: "No se pudo reemplazar el usuario",
+            obj: ex
+        }));
+}
+
+function update(req, res, next) {
+    const id = req.params.id;
+    let user = req.body.user;
+    let password = req.body.password;
+    let socialMediaList = req.body.socialMediaList;
+    let role = req.body.role;
+
+    let updatedUser = new Object();
+    if (user) updatedUser._user = user;
+    if (password) updatedUser._password = password;
+    if (socialMediaList) updatedUser._socialMediaList = socialMediaList;
+    if (role) updatedUser._role = role;
+
+    User.findOneAndUpdate({"_id": id}, updatedUser)
+        .then(obj => res.status(200).json({
+            msg: "Se actualizó el usuario",
+            obj: obj
+        })).catch(ex => res.status(500).json({
+            msg: "No se pudo actualizar el usuario",
+            obj: ex
+        }));
+}
+
+function destroy(req, res, next) {
+    const id = req.params.id;
+    User.findOneAndDelete({"_id": id}).then(obj => res.status(200).json({
+        msg: "Usuario eliminado correctamente",
+        obj: obj
+    }))
+    .catch(ex => res.status(500).json({
+        msg: "No se pudo eliminar el usuario",
+        obj: ex
+    }));
+}
+
+module.exports = { create, list, index, replace, update, destroy };

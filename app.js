@@ -36,7 +36,7 @@ db.on('error', ()=>{
 });
 
 i18n.configure({
-  locales:['es-lat', 'es-esp', 'en-eua','en-in'],
+  locales:['es', 'en'],
   cookie: 'language',
   directory: `${__dirname}/locales`,
 });

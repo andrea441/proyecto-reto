@@ -1,50 +1,112 @@
+const express = require('express');
 const Release = require('../models/release');
 
-exports.getReleases = async (req, res) => {
-  try {
-    const releases = await Release.find().populate('sprints');
-    res.json(releases);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener releases' });
-  }
-};
+function create(req, res, next) {
+    const version = req.body.version;
+    const retrospective = req.body.retrospective || [];
+    const sprints = req.body.sprints || [];
 
-exports.createRelease = async (req, res) => {
-  try {
-    const nuevaRelease = new Release(req.body);
-    await nuevaRelease.save();
-    res.status(201).json(nuevaRelease);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al crear la release' });
-  }
-};
+    let release = new Release({
+        _version: version,
+        _retrospective: retrospective,
+        _sprints: sprints
+    });
 
-exports.getReleaseById = async (req, res) => {
-  try {
-    const release = await Release.findById(req.params.id).populate('sprints');
-    if (!release) return res.status(404).json({ error: 'Release no encontrada' });
-    res.json(release);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener la release' });
-  }
-};
+    release.save()
+        .then(obj => res.status(200).json({
+            msg: "Release creada correctamente",
+            obj: obj
+        }))
+        .catch(ex => res.status(500).json({
+            msg: "No se pudo almacenar la release",
+            obj: ex
+        }));
+}
 
-exports.updateRelease = async (req, res) => {
-  try {
-    const releaseActualizada = await Release.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!releaseActualizada) return res.status(404).json({ error: 'Release no encontrada' });
-    res.json(releaseActualizada);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al actualizar la release' });
-  }
-};
+function list(req, res, next) {
+    let page = req.params.page ? req.params.page : 1;
+    const options = {
+        page: page,
+        limit: 5
+    };
 
-exports.deleteRelease = async (req, res) => {
-  try {
-    const releaseEliminada = await Release.findByIdAndDelete(req.params.id);
-    if (!releaseEliminada) return res.status(404).json({ error: 'Release no encontrada' });
-    res.json({ message: 'Release eliminada correctamente' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar la release' });
-  }
-};
+    Release.paginate({}, options)
+        .then(objs => res.status(200).json({
+            msg: "Lista de releases",
+            obj: objs
+        }))
+        .catch(ex => res.status(500).json({
+            msg: "No se pudo consultar la lista de releases",
+            obj: ex
+        }));
+}
+
+function index(req, res, next) {
+    const id = req.params.id;
+    Release.findOne({ "_id": id })
+        .then(obj => res.status(200).json({
+            msg: `Release con el id ${id}`,
+            obj: obj
+        }))
+        .catch(ex => res.status(500).json({
+            msg: "No se pudo consultar la release",
+            obj: ex
+        }));
+}
+
+function replace(req, res, next) {
+    const id = req.params.id;
+    const version = req.body.version || "";
+    const retrospective = req.body.retrospective || [];
+    const sprints = req.body.sprints || [];
+
+    let release = {
+        _version: version,
+        _retrospective: retrospective,
+        _sprints: sprints
+    };
+
+    Release.findOneAndUpdate({ "_id": id }, release, { new: true })
+        .then(obj => res.status(200).json({
+            msg: "Se reemplazó la release",
+            obj: obj
+        }))
+        .catch(ex => res.status(500).json({
+            msg: "No se pudo reemplazar la release",
+            obj: ex
+        }));
+}
+
+function update(req, res, next) {
+    const id = req.params.id;
+    let release = {};
+
+    if (req.body.version) release._version = req.body.version;
+    if (req.body.retrospective) release._retrospective = req.body.retrospective;
+    if (req.body.sprints) release._sprints = req.body.sprints;
+
+    Release.findOneAndUpdate({ "_id": id }, release, { new: true })
+        .then(obj => res.status(200).json({
+            msg: "Se actualizó la release",
+            obj: obj
+        }))
+        .catch(ex => res.status(500).json({
+            msg: "No se pudo actualizar la release",
+            obj: ex
+        }));
+}
+
+function destroy(req, res, next) {
+    const id = req.params.id;
+    Release.findOneAndDelete({ "_id": id })
+        .then(obj => res.status(200).json({
+            msg: "Release eliminada correctamente",
+            obj: obj
+        }))
+        .catch(ex => res.status(500).json({
+            msg: "No se pudo eliminar la release",
+            obj: ex
+        }));
+}
+
+module.exports = { create, list, index, replace, update, destroy };

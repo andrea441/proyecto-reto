@@ -1,54 +1,101 @@
-const Tablero = require('../models/board');
+const express = require('express');
+const Board = require('../models/board');
 
-exports.getTableros = async (req, res) => {
-  try {
-    const tableros = await Tablero.find()
-      .populate('columnaProductBacklog')
-      .populate('columnasReleaseBacklog');
-    res.json(tableros);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener tableros' });
-  }
-};
+function create(req, res, next) {
+    const columnProductBacklog = req.body.columnProductBacklog;
+    const columnsReleaseBacklog = req.body.columnsReleaseBacklog;
 
-exports.createTablero = async (req, res) => {
-  try {
-    const nuevoTablero = new Tablero(req.body);
-    await nuevoTablero.save();
-    res.status(201).json(nuevoTablero);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al crear el tablero' });
-  }
-};
+    let board = new Board({
+        columnProductBacklog: columnProductBacklog,
+        columnsReleaseBacklog: columnsReleaseBacklog
+    });
 
-exports.getTableroById = async (req, res) => {
-  try {
-    const tablero = await Tablero.findById(req.params.id)
-      .populate('columnaProductBacklog')
-      .populate('columnasReleaseBacklog');
-    if (!tablero) return res.status(404).json({ error: 'Tablero no encontrado' });
-    res.json(tablero);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el tablero' });
-  }
-};
+    board.save().then(obj => res.status(200).json({
+        msg: "Tablero creado correctamente",
+        obj: obj
+    })).catch(ex => res.status(500).json({
+        msg: "No se pudo crear el tablero",
+        obj: ex
+    }));
+}
 
-exports.updateTablero = async (req, res) => {
-  try {
-    const tableroActualizado = await Tablero.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!tableroActualizado) return res.status(404).json({ error: 'Tablero no encontrado' });
-    res.json(tableroActualizado);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al actualizar el tablero' });
-  }
-};
+function list(req, res, next) {
+    let page = req.params.page ? req.params.page : 1;
+    const options = {
+        page: page,
+        limit: 5
+    };
 
-exports.deleteTablero = async (req, res) => {
-  try {
-    const tableroEliminado = await Tablero.findByIdAndDelete(req.params.id);
-    if (!tableroEliminado) return res.status(404).json({ error: 'Tablero no encontrado' });
-    res.json({ message: 'Tablero eliminado correctamente' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el tablero' });
-  }
-};
+    Board.paginate({}, options).then(objs => res.status(200).json({
+        msg: "Lista de tableros",
+        obj: objs
+    })).catch(ex => res.status(500).json({
+        msg: "No se pudo consultar la lista de tableros",
+        obj: ex
+    }));
+}
+
+function index(req, res, next) {
+    const id = req.params.id;
+    Board.findOne({"_id":id}).then(obj => res.status(200).json({
+        msg: `Tablero con el id ${id}`,
+        obj: obj
+    }))
+    .catch(ex => res.status(500).json({
+        msg: "No se pudo consultar el tablero",
+        obj: ex
+    }));
+}
+
+function replace(req, res, next) {
+    const id = req.params.id;
+    let columnProductBacklog = req.body.columnProductBacklog ? req.body.columnProductBacklog: "";
+    let columnsReleaseBacklog = req.body.columnsReleaseBacklog ? req.body.columnsReleaseBacklog: "";
+
+    let board = new Object({
+        _columnProductBacklog: columnProductBacklog,
+        _columnsReleaseBacklog: columnsReleaseBacklog
+    })
+
+    Board.findOneAndUpdate({"_id":id}, board)
+    .then(obj => res.status(200).json({
+        msg: "Se reemplazo el tablero",
+        obj: obj
+    })).catch(ex => res.status(500).json({
+        msg: "No se pudo reemplazar el tablero",
+        obj: ex
+    }));
+}
+
+function update(req, res, next) {
+    const id = req.params.id;
+    let columnProductBacklog = req.body.columnProductBacklog;
+    let columnsReleaseBacklog = req.body.columnsReleaseBacklog;
+
+    let board = new Object();
+    if(columnProductBacklog) board._columnProductBacklog = columnProductBacklog;
+    if(columnsReleaseBacklog) board._columnsReleaseBacklog = columnsReleaseBacklog;
+
+    Board.findOneAndUpdate({"_id":id},board)
+        .then(obj => res.status(200).json({
+            msg: "Se actualizo el tablero",
+            obj: obj
+        })).catch(ex => res.status(500).json({
+            msg: "No se pudo actualizar el tablero",
+            obj: ex
+        }));
+}
+
+function destroy(req, res, next) {
+    const id = req.params.id;
+    Board.findOneAndDelete({"_id":id}).then(obj => res.status(200).json({
+        msg: "Tablero eliminado correctamente",
+        obj: obj
+    }))
+    .catch(ex => res.status(500).json({
+        msg: "No se pudo eliminar el tablero",
+        obj: ex
+    }));
+}
+
+module.exports = {create, list, index, replace, update, destroy};

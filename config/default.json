@@ -6,6 +6,6 @@
     "server": {
       "port": 3000
     },
-    "locales": ["es-lat", "es-esp", "en-eua", "en-in"]
+    "locales": ["es", "en"]
   }
   

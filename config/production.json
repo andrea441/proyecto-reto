@@ -6,6 +6,6 @@
     "server": {
       "port": 8080
     },
-    "locales": ["es-lat", "es-esp", "en-eua", "en-in"]
+    "locales": ["es", "en"]
   }
   
